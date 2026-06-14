@@ -18,6 +18,7 @@ function createMarkerElement(incident: Incident): HTMLElement {
   const size = incident.is_seed ? 32 : 40;
 
   const el = document.createElement('div');
+  el.className = 'incident-marker';
   el.style.cssText = `
     width: ${size}px;
     height: ${size}px;
@@ -30,14 +31,11 @@ function createMarkerElement(incident: Incident): HTMLElement {
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     border: ${incident.is_seed ? '2px dashed rgba(255,255,255,0.5)' : '2px solid rgba(255,255,255,0.8)'};
-    transition: transform 0.15s ease;
+    position: relative;
     user-select: none;
   `;
   el.textContent = meta.emoji;
   el.title = meta.label;
-
-  el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.2)'; });
-  el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
 
   return el;
 }

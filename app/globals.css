@@ -19,9 +19,18 @@
   animation: fade-in 0.2s ease;
 }
 
-/* Mapbox overrides */
-.mapboxgl-ctrl-logo { display: none !important; }
-.mapboxgl-ctrl-attrib { font-size: 10px !important; opacity: 0.5; }
+/* Incident marker — hover handled in pure CSS to avoid conflicting
+   with MapLibre's JS transform used for map positioning */
+.incident-marker {
+  transition: transform 0.15s ease;
+}
+.incident-marker:hover {
+  transform: scale(1.2);
+}
+
+/* MapLibre overrides */
+.maplibregl-ctrl-logo { display: none !important; }
+.maplibregl-ctrl-attrib { font-size: 10px !important; opacity: 0.5; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 4px; }

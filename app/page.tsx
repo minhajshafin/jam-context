@@ -132,9 +132,12 @@ export default function Home() {
 
       {/* Incident count badge */}
       {!loading && incidents.length > 0 && (
-        <div className="absolute bottom-24 left-4 z-20 pointer-events-none">
+        <div className="absolute bottom-28 left-4 z-20 pointer-events-none">
           <div className="bg-gray-900/80 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs text-gray-400 border border-gray-700">
-            {incidents.length} active report{incidents.length !== 1 ? 's' : ''}
+            {incidents.filter(i => !i.is_seed).length > 0
+              ? `${incidents.length} active reports (${incidents.filter(i => i.is_seed).length} demo)`
+              : `${incidents.filter(i => i.is_seed).length} demo reports — be the first to report!`
+            }
           </div>
         </div>
       )}
@@ -148,10 +151,13 @@ export default function Home() {
             setTapPlacedLocation(null);
             setReportOpen(true);
           }}
-          className="absolute bottom-8 right-5 z-30 w-16 h-16 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 shadow-xl flex items-center justify-center text-2xl transition-all border-2 border-blue-400/30"
+          className="absolute bottom-8 right-5 z-30 w-16 h-16 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 shadow-2xl flex items-center justify-center transition-all border-2 border-blue-400/40"
           aria-label="Report a new incident"
         >
-          ＋
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
         </button>
       )}
 
