@@ -1,12 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { MAPBOX_CENTER, MAPBOX_STYLE, MAPBOX_ZOOM, CATEGORY_META } from '@/lib/constants';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { MAPBOX_CENTER, MAP_STYLE, MAPBOX_ZOOM, CATEGORY_META } from '@/lib/constants';
 import type { Incident } from '@/types';
-
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
 interface MapProps {
   incidents: Incident[];
@@ -45,22 +43,22 @@ function createMarkerElement(incident: Incident): HTMLElement {
 }
 
 export default function Map({ incidents, onMarkerClick, tapToPlaceMode, onMapTap }: MapProps) {
-  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const markersRef = useRef<globalThis.Map<string, mapboxgl.Marker>>(new globalThis.Map());
+  const markersRef = useRef<globalThis.Map<string, maplibregl.Marker>>(new globalThis.Map());
 
-  // Initialize map once
+  // Initialize map once — no token required for MapLibre + CARTO tiles
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return;
 
-    mapRef.current = new mapboxgl.Map({
+    mapRef.current = new maplibregl.Map({
       container: containerRef.current,
-      style: MAPBOX_STYLE,
+      style: MAP_STYLE,
       center: MAPBOX_CENTER,
       zoom: MAPBOX_ZOOM,
     });
 
-    mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    mapRef.current.addControl(new maplibregl.NavigationControl(), 'top-right');
   }, []);
 
   // Tap-to-place handler
@@ -75,7 +73,7 @@ export default function Map({ incidents, onMarkerClick, tapToPlaceMode, onMapTap
 
     map.getCanvas().style.cursor = 'crosshair';
 
-    const handleClick = (e: mapboxgl.MapMouseEvent) => {
+    const handleClick = (e: maplibregl.MapMouseEvent) => {
       if (onMapTap) onMapTap(e.lngLat.lat, e.lngLat.lng);
     };
 
@@ -106,7 +104,7 @@ export default function Map({ incidents, onMarkerClick, tapToPlaceMode, onMapTap
         e.stopPropagation();
         onMarkerClick(incident);
       });
-      const marker = new mapboxgl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: el })
         .setLngLat([incident.lng, incident.lat])
         .addTo(map);
       markersRef.current.set(incident.id, marker);
@@ -117,7 +115,6 @@ export default function Map({ incidents, onMarkerClick, tapToPlaceMode, onMapTap
     const map = mapRef.current;
     if (!map) return;
 
-    // Map may not be ready yet on first render
     if (map.isStyleLoaded()) {
       syncMarkers();
     } else {

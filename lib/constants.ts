@@ -26,10 +26,10 @@ export const DESCRIPTION_MAX_CHARS = 150;
 // "Near me" radius in metres for the proximity banner
 export const NEARBY_RADIUS_METRES = 500;
 
-// Mapbox config
+// Map config — CARTO dark-matter GL style (free, no account, no API key)
 export const MAPBOX_CENTER: [number, number] = [90.4125, 23.8103]; // Dhaka
 export const MAPBOX_ZOOM = 12;
-export const MAPBOX_STYLE = 'mapbox://styles/mapbox/dark-v11';
+export const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
 
 // Category display metadata
 export const CATEGORY_META: Record<

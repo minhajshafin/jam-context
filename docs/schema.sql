@@ -42,11 +42,11 @@ CREATE TABLE votes (
 );
 
 -- ─── Row Level Security ───────────────────────────────────────
--- incidents: public reads; all writes go through the service-role API route
+-- incidents: public reads (using the Publishable key via RLS); all writes go through the Secret-key API route
 ALTER TABLE incidents ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "allow_public_read"
   ON incidents FOR SELECT TO anon USING (true);
 
--- votes: no direct client access — all writes go through the service-role API route
+-- votes: no direct client access — all writes go through the Secret-key API route
 ALTER TABLE votes ENABLE ROW LEVEL SECURITY;
--- (no SELECT/INSERT policy for anon — API route uses service_role which bypasses RLS)
+-- (no SELECT/INSERT policy for anon — API route uses service_role/secret key which bypasses RLS)
